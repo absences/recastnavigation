@@ -84,6 +84,12 @@ endif ( )
 
 # 精简so文件大小
 if (ANDROID)
+    # Support Android devices using 16 KB memory pages.
+    target_link_options(RecastDll PRIVATE
+        "-Wl,-z,max-page-size=16384"
+        "-Wl,-z,common-page-size=16384"
+    )
+
     #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c++11 -Os -Wall")
     #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Os -Wall")
 	
