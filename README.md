@@ -2,6 +2,8 @@
 Recast & Detour
 ===============
 
+中文说明（含 Unity3D 集成与示例）：[README_CN.md](README_CN.md)
+
 [![Build](https://github.com/recastnavigation/recastnavigation/actions/workflows/Build.yaml/badge.svg)](https://github.com/recastnavigation/recastnavigation/actions/workflows/Build.yaml)
 [![Tests](https://github.com/recastnavigation/recastnavigation/actions/workflows/Tests.yaml/badge.svg)](https://github.com/recastnavigation/recastnavigation/actions/workflows/Tests.yaml)
 

@@ -1,6 +1,9 @@
 name: build_recastdll
 
-on: 
+permissions:
+  contents: write
+
+on:
   workflow_dispatch:
     inputs:
       tag_name:
@@ -12,7 +15,7 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
       - name: Download & install SDL
         run: |
           curl -L -o SDL2.dmg https://github.com/libsdl-org/SDL/releases/download/release-2.24.2/SDL2-2.24.2.dmg
@@ -24,46 +27,46 @@ jobs:
         working-directory: RecastCustom/NavMeshExport
         run: ./make_osx.sh 
       - name: UploadNavMeshExport
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           path: ./RecastCustom/NavMeshExport/Plugins/**/*
-          name: plugin_NavMeshExport
+          name: plugin_NavMeshExport-${{ github.job }}
   linux_navmesh:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
       - name: Install lib
         run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev libsdl2-dev
       - name: Build
         working-directory: RecastCustom/NavMeshExport
         run: ./make_linux64.sh
       - name: UploadNavMeshExport
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           path: ./RecastCustom/NavMeshExport/Plugins/**/*
-          name: plugin_NavMeshExport
+          name: plugin_NavMeshExport-${{ github.job }}
   linux_navmesh32:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
       - name: Install 32-bit support and other lib
         run: sudo dpkg --add-architecture i386 && sudo apt-get update && sudo apt-get install -y gcc-multilib g++-multilib libgl1-mesa-dev:i386 libsdl2-dev:i386
       - name: Build
         working-directory: RecastCustom/NavMeshExport
         run: ./make_linux32.sh
       - name: UploadNavMeshExport
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           path: ./RecastCustom/NavMeshExport/Plugins/**/*
-          name: plugin_NavMeshExport
+          name: plugin_NavMeshExport-${{ github.job }}
   windows_navmesh:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
       
       - name: Insatll MSVC
-        uses: microsoft/setup-msbuild@v1.1
+        uses: microsoft/setup-msbuild@v3
 
       - name: Download and Install SDL
         working-directory: RecastDemo/Contrib
@@ -80,14 +83,14 @@ jobs:
           .\make_win32.bat
           .\make_win64.bat
       - name: UploadNavMeshExport
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           path: ./RecastCustom/NavMeshExport/Plugins/**/*
-          name: plugin_NavMeshExport
+          name: plugin_NavMeshExport-${{ github.job }}
   android:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
       - name: Install NDK
         run: |
           cd ~
@@ -99,40 +102,40 @@ jobs:
         working-directory: RecastCustom/RecastDll
         run: ./make_android.sh
       - name: UploadRecastDll
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           path: ./RecastCustom/RecastDll/Plugins/**/*
-          name: plugin_recastdll
+          name: plugin_recastdll-${{ github.job }}
   ios:
     runs-on: macos-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
       - name: Build
         working-directory: RecastCustom/RecastDll
         run: ./make_ios.sh
       - name: UploadRecastDll
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           path: ./RecastCustom/RecastDll/Plugins/**/*
-          name: plugin_recastdll
+          name: plugin_recastdll-${{ github.job }}
   osx:
     runs-on: macos-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
       - name: Build
         working-directory: RecastCustom/RecastDll
         run: ./make_osx.sh
       - name: UploadRecastDll
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           path: ./RecastCustom/RecastDll/Plugins/**/*
-          name: plugin_recastdll
+          name: plugin_recastdll-${{ github.job }}
   linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
       - name: Install 32-bit support
         run: sudo apt-get update && sudo apt-get install -y gcc-multilib g++-multilib
       - name: Build
@@ -141,18 +144,18 @@ jobs:
           ./make_linux32.sh
           ./make_linux64.sh
       - name: UploadRecastDll
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           path: ./RecastCustom/RecastDll/Plugins/**/*
-          name: plugin_recastdll   
+          name: plugin_recastdll-${{ github.job }}
   windows:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
       
       - name: Insatll MSVC
-        uses: microsoft/setup-msbuild@v1.1
+        uses: microsoft/setup-msbuild@v3
       
       - name: Build
         run: |
@@ -161,25 +164,27 @@ jobs:
           .\make_win64.bat
           .\make_uwp.bat
       - name: UploadRecastDll
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           path: ./RecastCustom/RecastDll/Plugins/**/*
-          name: plugin_recastdll   
+          name: plugin_recastdll-${{ github.job }}
 
   publish:
     runs-on: ubuntu-latest
     needs: [windows,osx,linux,ios,android,windows_navmesh,osx_navmesh,linux_navmesh,linux_navmesh32]
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v8
         with:
-          name: plugin_recastdll
           path: plugin_recastdll/
+          pattern: plugin_recastdll-*
+          merge-multiple: true
           
       - name: UploadRecastDll
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v8
         with:
-          name: plugin_NavMeshExport
           path: plugin_NavMeshExport/
+          pattern: plugin_NavMeshExport-*
+          merge-multiple: true
           
       - name: Create Release Asset
         run: |
@@ -187,7 +192,7 @@ jobs:
           tar cvfz navmeshexport_${{ github.event.inputs.tag_name }}.tgz plugin_NavMeshExport
 
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3
         with: # 将下述可执行文件 release 上去
           tag_name: ${{ github.event.inputs.tag_name }}
           files: |
