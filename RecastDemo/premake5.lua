@@ -14,7 +14,7 @@ workspace "recastnavigation"
 
 	location (todir)
 
-	floatingpoint "Fast"
+	-- Do not enable fast floating-point mode: Detour relies on finite-value checks.
 	exceptionhandling "Off"
 	rtti "Off"
 	symbols "On"
