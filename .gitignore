@@ -83,3 +83,6 @@ cmake-build-*/
 /RecastCustom/RecastUnity/**/*.VC.db
 /RecastCustom/RecastUnity/UserSettings
 /RecastCustom/RecastUnity/UIElementsSchema
+build-ninja/*
+build-recastdemo/*
+build-vs18/*

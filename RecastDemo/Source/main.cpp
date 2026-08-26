@@ -468,7 +468,8 @@ int main(int /*argc*/, char** /*argv*/)
 		}
 		
 		float movex = (moveRight - moveLeft) * keybSpeed * dt;
-		float movey = (moveBack - moveFront) * keybSpeed * dt + scrollZoom * 2.0f;
+		const float mouseWheelZoomSpeed = 20.0f;
+		float movey = (moveBack - moveFront) * keybSpeed * dt + scrollZoom * mouseWheelZoomSpeed;
 		scrollZoom = 0;
 		
 		cameraPos[0] += movex * (float)modelviewMatrix[0];

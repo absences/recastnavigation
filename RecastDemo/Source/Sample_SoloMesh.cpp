@@ -409,6 +409,16 @@ bool Sample_SoloMesh::handleBuild()
 	// area could be specified by an user defined box, etc.
 	rcVcopy(m_cfg.bmin, bmin);
 	rcVcopy(m_cfg.bmax, bmax);
+
+	// Limit the solo navmesh build to a 500 x 100 x 500 box centered at
+	// the world origin. Keeping this boundary small prevents large scenes
+	// from exceeding Detour's per-mesh vertex limit.
+	m_cfg.bmin[0] = -250.0f;
+	m_cfg.bmin[1] = -50.0f;
+	m_cfg.bmin[2] = -250.0f;
+	m_cfg.bmax[0] = 250.0f;
+	m_cfg.bmax[1] = 50.0f;
+	m_cfg.bmax[2] = 250.0f;
 	rcCalcGridSize(m_cfg.bmin, m_cfg.bmax, m_cfg.cs, &m_cfg.width, &m_cfg.height);
 
 	// Reset build times gathering.
